@@ -1,0 +1,82 @@
+<div class="login-page">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Iniciar Sesión</mat-card-title>
+      <mat-card-subtitle>Accede a tu cuenta de ProDirectory</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Error Alert -->
+      @if (loginError()) {
+      <div class="error-alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ loginError() }}</span>
+      </div>
+      }
+
+      <form class="login-form" (ngSubmit)="login()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            [(ngModel)]="email"
+            name="email"
+            type="email"
+            required
+            [disabled]="loading()"
+          />
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [(ngModel)]="password"
+            name="password"
+            [type]="hidePassword() ? 'password' : 'text'"
+            required
+            [disabled]="loading()"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword.set(!hidePassword())"
+            [disabled]="loading()"
+          >
+            <mat-icon
+              >{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon
+            >
+          </button>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="login-button"
+          [disabled]="loading() || !email || !password"
+        >
+          @if (loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+          <span>Ingresando...</span>
+          } @else {
+          <ng-container>
+            <mat-icon>login</mat-icon>
+            <span>Ingresar</span>
+          </ng-container>
+          }
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <a mat-button routerLink="/" [disabled]="loading()">
+        <mat-icon>arrow_back</mat-icon>
+        Volver al Inicio
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>

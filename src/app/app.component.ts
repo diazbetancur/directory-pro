@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AnalyticsService } from './shared/services/analytics.service';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  template: `<router-outlet />`,
+  styles: [
+    `
+      :host {
+        display: block;
+        min-height: 100vh;
+      }
+    `,
+  ],
 })
-export class AppComponent {
-  title = 'pro-directory';
+export class AppComponent implements OnInit {
+  private readonly analytics = inject(AnalyticsService);
+
+  ngOnInit(): void {
+    // Initialize analytics (SSR-safe, only runs in browser)
+    this.analytics.initialize();
+  }
 }

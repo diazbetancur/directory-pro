@@ -1,0 +1,94 @@
+<div class="admin-home">
+  <header>
+    <h1>Panel de Administración</h1>
+    <p>Bienvenido al panel de control</p>
+  </header>
+
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <mat-icon class="stat-icon users">people</mat-icon>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats().totalProfessionals }}</span>
+          <span class="stat-label">Profesionales Registrados</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <mat-icon class="stat-icon pending">pending_actions</mat-icon>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats().pendingReview }}</span>
+          <span class="stat-label">Pendientes de Revisión</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <mat-icon class="stat-icon verified">verified</mat-icon>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats().verifiedProfessionals }}</span>
+          <span class="stat-label">Verificados</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <mat-icon class="stat-icon requests">inbox</mat-icon>
+        <div class="stat-info">
+          <span class="stat-value">{{ stats().totalRequests }}</span>
+          <span class="stat-label">Solicitudes Totales</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <section class="quick-actions">
+    <h2>Acciones Rápidas</h2>
+    <div class="actions-grid">
+      <mat-card class="action-card" routerLink="/admin/professionals">
+        <mat-card-content>
+          <mat-icon>person_search</mat-icon>
+          <span>Revisar Profesionales</span>
+          <mat-icon class="arrow">arrow_forward</mat-icon>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-card-content>
+          <mat-icon>report</mat-icon>
+          <span>Ver Reportes</span>
+          <mat-icon class="arrow">arrow_forward</mat-icon>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <mat-card-content>
+          <mat-icon>category</mat-icon>
+          <span>Gestionar Categorías</span>
+          <mat-icon class="arrow">arrow_forward</mat-icon>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <section class="recent-activity">
+    <h2>Actividad Reciente</h2>
+    <mat-card>
+      <mat-card-content>
+        @for (activity of recentActivities; track activity.id) {
+        <div class="activity-item">
+          <mat-icon [class]="activity.type">{{ activity.icon }}</mat-icon>
+          <div class="activity-info">
+            <span class="activity-text">{{ activity.text }}</span>
+            <span class="activity-time">{{ activity.time }}</span>
+          </div>
+        </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

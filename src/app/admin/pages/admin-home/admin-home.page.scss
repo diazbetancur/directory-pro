@@ -1,0 +1,166 @@
+.admin-home {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  header {
+    margin-bottom: 32px;
+
+    h1 {
+      margin: 0 0 8px;
+    }
+
+    p {
+      color: #666;
+      margin: 0;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+
+  .stat-card {
+    mat-card-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .stat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+
+      &.users {
+        color: #667eea;
+      }
+      &.pending {
+        color: #f59e0b;
+      }
+      &.verified {
+        color: #10b981;
+      }
+      &.requests {
+        color: #8b5cf6;
+      }
+    }
+
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+.quick-actions {
+  margin-bottom: 32px;
+
+  h2 {
+    margin-bottom: 16px;
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .action-card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    mat-card-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+
+      mat-icon:first-child {
+        color: #667eea;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+      }
+
+      span {
+        flex: 1;
+        font-weight: 500;
+      }
+
+      .arrow {
+        color: #999;
+      }
+    }
+  }
+}
+
+.recent-activity {
+  h2 {
+    margin-bottom: 16px;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    mat-icon {
+      padding: 8px;
+      border-radius: 50%;
+
+      &.new-user {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      &.verified {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      &.report {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+    }
+
+    .activity-info {
+      display: flex;
+      flex-direction: column;
+
+      .activity-text {
+        font-weight: 500;
+      }
+
+      .activity-time {
+        font-size: 0.85rem;
+        color: #999;
+      }
+    }
+  }
+}
