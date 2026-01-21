@@ -5,8 +5,9 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
 import { TokenStorage } from '@core/auth';
+import { environment } from '@env';
+import { catchError, throwError } from 'rxjs';
 
 /**
  * Routes that require JWT authentication.
@@ -40,7 +41,7 @@ function requiresAuth(url: string): boolean {
  */
 export const jwtInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn
+  next: HttpHandlerFn,
 ) => {
   const tokenStorage = inject(TokenStorage);
 
@@ -64,11 +65,13 @@ export const jwtInterceptor: HttpInterceptorFn = (
         // Clear invalid token
         tokenStorage.clearToken();
 
-        // Log for debugging
-        console.warn('[JWT Interceptor] Unauthorized - Token cleared');
+        // Log only in development
+        if (!environment.production) {
+          console.warn('[JWT Interceptor] Unauthorized - Token cleared');
+        }
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };

@@ -20,14 +20,17 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
-import { jwtInterceptor } from '@core/http';
+import { errorInterceptor, jwtInterceptor } from '@core/http';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding(), withViewTransitions()),
-    provideHttpClient(withFetch(), withInterceptors([jwtInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([jwtInterceptor, errorInterceptor]),
+    ),
     provideAnimationsAsync(),
     provideClientHydration(withEventReplay()),
     provideServiceWorker('ngsw-worker.js', {

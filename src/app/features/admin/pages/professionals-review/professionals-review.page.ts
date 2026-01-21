@@ -1,11 +1,14 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AuthService } from '@core/auth';
+import { ToastService } from '@shared/services';
+import { PERMISSIONS } from '../../admin-menu.config';
 
 interface Professional {
   id: string;
@@ -26,13 +29,30 @@ interface Professional {
     MatTableModule,
     MatChipsModule,
     MatMenuModule,
-    MatSnackBarModule,
+    MatTooltipModule,
   ],
   templateUrl: './professionals-review.page.html',
   styleUrl: './professionals-review.page.scss',
 })
 export class ProfessionalsReviewPageComponent {
+  private readonly authService = inject(AuthService);
+  private readonly toast = inject(ToastService);
+
   displayedColumns = ['name', 'specialty', 'status', 'createdAt', 'actions'];
+
+  // Permission checks using computed signals
+  readonly canVerify = computed(() =>
+    this.authService.hasPermission(PERMISSIONS.PROFILES_VERIFY),
+  );
+  readonly canUpdate = computed(() =>
+    this.authService.hasPermission(PERMISSIONS.PROFILES_UPDATE),
+  );
+  readonly canFeature = computed(() =>
+    this.authService.hasPermission(PERMISSIONS.PROFILES_FEATURE),
+  );
+  readonly canDelete = computed(() =>
+    this.authService.hasPermission(PERMISSIONS.PROFILES_DELETE),
+  );
 
   professionals = signal<Professional[]>([
     {
@@ -77,7 +97,23 @@ export class ProfessionalsReviewPageComponent {
     },
   ]);
 
-  constructor(private snackBar: MatSnackBar) {}
+  verifyPro(id: string): void {
+    if (!this.canVerify()) {
+      this.toast.error('No tienes permiso para verificar');
+      return;
+    }
+    this.updateStatus(id, 'verified');
+    this.toast.success('Profesional verificado exitosamente');
+  }
+
+  rejectPro(id: string): void {
+    if (!this.canUpdate()) {
+      this.toast.error('No tienes permiso para rechazar');
+      return;
+    }
+    this.updateStatus(id, 'rejected');
+    this.toast.warning('Profesional rechazado');
+  }
 
   getStatusLabel(status: string): string {
     const labels: Record<string, string> = {
@@ -88,21 +124,33 @@ export class ProfessionalsReviewPageComponent {
     return labels[status] || status;
   }
 
-  verifyPro(id: string): void {
-    this.updateStatus(id, 'verified');
-    this.snackBar.open('Profesional verificado exitosamente', 'Cerrar', {
-      duration: 3000,
-    });
+  editPro(id: string): void {
+    if (!this.canUpdate()) {
+      this.toast.error('No tienes permiso para editar');
+      return;
+    }
+    this.toast.info('Editando profesional: ' + id);
   }
 
-  rejectPro(id: string): void {
-    this.updateStatus(id, 'rejected');
-    this.snackBar.open('Profesional rechazado', 'Cerrar', { duration: 3000 });
+  featurePro(id: string): void {
+    if (!this.canFeature()) {
+      this.toast.error('No tienes permiso para destacar');
+      return;
+    }
+    this.toast.success('Profesional destacado: ' + id);
   }
 
-  private updateStatus(id: string, status: Professional['status']): void {
+  deletePro(id: string): void {
+    if (!this.canDelete()) {
+      this.toast.error('No tienes permiso para eliminar');
+      return;
+    }
+    this.toast.warning('Profesional eliminado: ' + id);
+  }
+
+  updateStatus(id: string, status: Professional['status']): void {
     this.professionals.update((pros) =>
-      pros.map((p) => (p.id === id ? { ...p, status } : p))
+      pros.map((p) => (p.id === id ? { ...p, status } : p)),
     );
   }
 }

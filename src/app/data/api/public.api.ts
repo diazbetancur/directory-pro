@@ -52,7 +52,7 @@ export class PublicApi {
    */
   getProfilePage(slug: string): Observable<ProfilePageResponse> {
     return this.api.get<ProfilePageResponse>(
-      `/public/pages/profile/${encodeURIComponent(slug)}`
+      `/public/pages/profile/${encodeURIComponent(slug)}`,
     );
   }
 
@@ -62,21 +62,18 @@ export class PublicApi {
 
   /**
    * GET /api/public/search/suggest
-   * Typeahead suggestions for search
+   * Typeahead suggestions for search.
+   *
+   * Note: The TypeaheadStore applies debounce, distinctUntilChanged, and
+   * switchMap optimizations. This method just makes the API call.
+   * Minimum length validation (3 chars) is handled by TypeaheadStore.
    */
   suggest(query: string, limit = 10): Observable<SuggestResponse> {
-    if (query.length < 2) {
-      // API requires minimum 2 characters
-      return new Observable((subscriber) => {
-        subscriber.next({ professionals: [], categories: [], services: [] });
-        subscriber.complete();
-      });
-    }
     const params = new URLSearchParams();
     params.set('q', query);
     params.set('limit', String(limit));
     return this.api.get<SuggestResponse>(
-      `/public/search/suggest?${params.toString()}`
+      `/public/search/suggest?${params.toString()}`,
     );
   }
 
@@ -101,11 +98,11 @@ export class PublicApi {
    * Create a contact request for a professional
    */
   createRequest(
-    payload: CreateServiceRequestPayload
+    payload: CreateServiceRequestPayload,
   ): Observable<CreateServiceRequestResponse> {
     return this.api.post<CreateServiceRequestResponse>(
       '/public/requests',
-      payload
+      payload,
     );
   }
 

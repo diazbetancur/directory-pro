@@ -35,8 +35,8 @@ export class HomePageComponent implements OnInit {
           this.seoService.setSeo(response.seo);
         }
       },
-      error: (err) => {
-        console.error('Error loading home page:', err);
+      error: () => {
+        // Error is handled by store and shown in UI
       },
     });
   }

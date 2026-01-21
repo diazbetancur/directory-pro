@@ -1,8 +1,18 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { environment } from '@env';
 
 const TOKEN_KEY = 'auth_token';
 const TOKEN_EXPIRY_KEY = 'auth_token_expiry';
+
+/**
+ * Debug log helper - only logs in development
+ */
+function debugLog(message: string, ...args: unknown[]): void {
+  if (!environment.production) {
+    console.warn(message, ...args);
+  }
+}
 
 /**
  * SSR-safe token storage service.
@@ -27,7 +37,7 @@ export class TokenStorage {
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(TOKEN_EXPIRY_KEY, expiresAt);
     } catch (e) {
-      console.warn('[TokenStorage] Failed to save token:', e);
+      debugLog('[TokenStorage] Failed to save token:', e);
     }
   }
 
@@ -50,7 +60,7 @@ export class TokenStorage {
 
       return token;
     } catch (e) {
-      console.warn('[TokenStorage] Failed to read token:', e);
+      debugLog('[TokenStorage] Failed to read token:', e);
       return null;
     }
   }
@@ -106,7 +116,7 @@ export class TokenStorage {
       localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(TOKEN_EXPIRY_KEY);
     } catch (e) {
-      console.warn('[TokenStorage] Failed to clear token:', e);
+      debugLog('[TokenStorage] Failed to clear token:', e);
     }
   }
 }

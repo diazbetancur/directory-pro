@@ -13,7 +13,7 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('@features/app/pages/login/login.page').then(
-        (m) => m.LoginPageComponent
+        (m) => m.LoginPageComponent,
       ),
     title: 'Iniciar Sesión - ProDirectory',
   },
@@ -32,9 +32,33 @@ export const routes: Routes = [
       import('@features/admin/admin.routes').then((m) => m.adminRoutes),
   },
 
-  // Fallback redirect
+  // 404 Not Found page
+  {
+    path: 'not-found',
+    loadComponent: () =>
+      import('@features/public/pages/not-found/not-found.page').then(
+        (m) => m.NotFoundPageComponent,
+      ),
+    title: 'Página no encontrada - ProDirectory',
+  },
+
+  // 403 Forbidden page (alias /forbidden for backwards compatibility)
+  {
+    path: '403',
+    loadComponent: () =>
+      import('@features/public/pages/not-authorized/not-authorized.page').then(
+        (m) => m.NotAuthorizedPageComponent,
+      ),
+    title: 'Acceso No Autorizado - ProDirectory',
+  },
+  {
+    path: 'forbidden',
+    redirectTo: '403', // Redirect to 403 for consistency
+  },
+
+  // Fallback redirect to not-found
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'not-found',
   },
 ];

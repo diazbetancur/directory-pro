@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -46,6 +46,12 @@ export class AppLayoutComponent {
   ];
 
   currentPageTitle = signal('Dashboard');
+
+  /**
+   * Check if user has admin access based on permissions (not roles)
+   * User must have at least one admin-level permission to see Admin Panel link
+   */
+  readonly hasAdminAccess = computed(() => this.authService.isAdminArea());
 
   logout(): void {
     this.authService.logout();

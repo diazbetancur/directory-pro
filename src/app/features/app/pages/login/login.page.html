@@ -17,6 +17,14 @@
     </mat-card-header>
 
     <mat-card-content>
+      <!-- Session Expired Alert -->
+      @if (sessionExpiredMessage()) {
+      <div class="warning-alert">
+        <mat-icon>schedule</mat-icon>
+        <span>{{ sessionExpiredMessage() }}</span>
+      </div>
+      }
+
       <!-- Login Error Alert -->
       @if (mode() === 'login' && loginError()) {
       <div class="error-alert">

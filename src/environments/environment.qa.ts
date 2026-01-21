@@ -1,10 +1,10 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://api-qa.prodirectory.com/api',
+  apiBaseUrl: 'http://localhost:5254/api',
   analytics: {
-    enabled: true,
+    enabled: true, // Enable in dev for testing
     provider: 'ga4' as const,
-    measurementId: 'G-QAXXXXXXXX', // Replace with your QA GA4 ID
-    debug: true,
+    measurementId: 'G-XXXXXXXXXX', // Replace with your dev/test GA4 ID
+    debug: true, // Log events to console in dev
   },
 };

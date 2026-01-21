@@ -7,13 +7,15 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import {
+  UserSession as ApiUserSession,
   AuthApi,
   getErrorMessage,
   LoginResponse,
-  UserSession as ApiUserSession,
 } from '@data/api';
+import { environment } from '@env';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
+import { hasAnyAdminPermission } from './permission.guard';
 import {
   getPrimaryRole,
   hasAllRoles,
@@ -85,20 +87,20 @@ export class AuthService {
   readonly isAdmin = computed(() => isAdminUser(this._session().roles));
   readonly isSuperAdmin = computed(() => isSuperAdmin(this._session().roles));
   readonly isProfessional = computed(() =>
-    isProfessionalUser(this._session().roles)
+    isProfessionalUser(this._session().roles),
   );
   readonly isClient = computed(() => this._session().roles.includes('Client'));
   readonly primaryRole = computed(() => getPrimaryRole(this._session().roles));
 
   // Professional profile info
   readonly hasProfessionalProfile = computed(
-    () => this._session().hasProfessionalProfile
+    () => this._session().hasProfessionalProfile,
   );
   readonly professionalProfileId = computed(
-    () => this._session().professionalProfileId
+    () => this._session().professionalProfileId,
   );
   readonly professionalProfileSlug = computed(
-    () => this._session().professionalProfileSlug
+    () => this._session().professionalProfileSlug,
   );
 
   private get isBrowser(): boolean {
@@ -132,12 +134,14 @@ export class AuthService {
         });
       }),
       catchError((err) => {
-        // Token is invalid or expired
-        console.warn('[AuthService] Failed to restore session:', err);
+        // Token is invalid or expired - log only in development
+        if (!environment.production) {
+          console.warn('[AuthService] Failed to restore session:', err);
+        }
         this.tokenStorage.clearToken();
         this._session.set(INITIAL_SESSION);
         return of(null);
-      })
+      }),
     );
   }
 
@@ -173,7 +177,7 @@ export class AuthService {
         this._loginError.set(message);
         this._session.update((s) => ({ ...s, loading: false }));
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -183,7 +187,7 @@ export class AuthService {
    */
   loginAndFetchSession(
     email: string,
-    password: string
+    password: string,
   ): Observable<ApiUserSession> {
     return new Observable((subscriber) => {
       this.login(email, password).subscribe({
@@ -232,7 +236,7 @@ export class AuthService {
           professionalProfileId: session.professionalProfileId,
           professionalProfileSlug: session.professionalProfileSlug,
         }));
-      })
+      }),
     );
   }
 
@@ -293,6 +297,14 @@ export class AuthService {
    */
   hasAllPermissions(permissions: readonly string[]): boolean {
     return hasAllRoles(this._session().permissions, permissions);
+  }
+
+  /**
+   * Check if user is in an admin area (has any admin-level permission).
+   * Admin permissions are: Profiles.*, ServiceRequests.*, Users.*, Roles.*, Catalog.*, Configuration.*
+   */
+  isAdminArea(): boolean {
+    return hasAnyAdminPermission(this._session().permissions);
   }
 
   /**

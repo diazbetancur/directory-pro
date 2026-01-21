@@ -7,3 +7,8 @@ export { GA4Adapter } from './analytics-ga4.adapter';
 export { AnalyticsService } from './analytics.service';
 export * from './analytics.types';
 export { SeoService } from './seo.service';
+export {
+  ToastService,
+  type ToastOptions,
+  type ToastType,
+} from './toast.service';

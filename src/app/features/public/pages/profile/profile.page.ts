@@ -14,10 +14,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProfileStore } from '@data/stores';
-import { ContactDialogComponent, ContactDialogData } from '@shared/ui';
 import { AnalyticsService, SeoService } from '@shared/services';
+import { ContactDialogComponent, ContactDialogData } from '@shared/ui';
+import { isNotFoundError } from '@shared/utils';
 
 @Component({
   selector: 'app-profile-page',
@@ -41,6 +42,7 @@ export class ProfilePageComponent implements OnInit {
   private readonly analytics = inject(AnalyticsService);
   private readonly dialog = inject(MatDialog);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly router = inject(Router);
 
   // Route param via input binding
   slug = input.required<string>();
@@ -90,7 +92,11 @@ export class ProfilePageComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error loading profile:', err);
+        // Redirect to not-found on 404
+        if (isNotFoundError(err)) {
+          this.router.navigate(['/not-found'], { replaceUrl: true });
+        }
+        // Other errors are handled by the store and shown in UI
       },
     });
   }

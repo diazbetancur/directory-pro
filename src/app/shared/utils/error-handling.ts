@@ -1,9 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  ProblemDetails,
-  getErrorMessage,
-  hasFieldErrors,
-} from '../data-access/api';
+import { ProblemDetails, getErrorMessage, hasFieldErrors } from '@data/api';
 
 /**
  * Error handling utilities for API errors
@@ -103,7 +99,7 @@ export function isValidationError(error: unknown): boolean {
  * Get field errors from validation error
  */
 export function getFieldErrors(
-  error: unknown
+  error: unknown,
 ): Record<string, string[]> | null {
   const errorBody = extractErrorBody(error);
   if (hasFieldErrors(errorBody)) {
@@ -117,7 +113,7 @@ export function getFieldErrors(
  */
 export function getFieldError(
   error: unknown,
-  fieldName: string
+  fieldName: string,
 ): string | null {
   const fieldErrors = getFieldErrors(error);
   if (
@@ -180,8 +176,4 @@ export function getStatusText(status: number): string {
 }
 
 // Re-export from api-models for convenience
-export {
-  getErrorMessage,
-  hasFieldErrors,
-  isProblemDetails,
-} from '../data-access/api';
+export { getErrorMessage, hasFieldErrors, isProblemDetails } from '@data/api';

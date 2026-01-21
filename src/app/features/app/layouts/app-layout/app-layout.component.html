@@ -9,15 +9,15 @@
 
   <nav class="nav-links">
     @for (item of navItems; track item.route) {
-    <a
-      mat-button
-      [routerLink]="item.route"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
-    >
-      <mat-icon>{{ item.icon }}</mat-icon>
-      {{ item.label }}
-    </a>
+      <a
+        mat-button
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
     }
   </nav>
 
@@ -32,11 +32,11 @@
       <mat-icon>home</mat-icon>
       <span>Ir al Inicio</span>
     </a>
-    @if (authService.isAdmin()) {
-    <a mat-menu-item routerLink="/admin">
-      <mat-icon>admin_panel_settings</mat-icon>
-      <span>Admin Panel</span>
-    </a>
+    @if (hasAdminAccess()) {
+      <a mat-menu-item routerLink="/admin">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>Admin Panel</span>
+      </a>
     }
     <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
@@ -58,11 +58,11 @@
       <mat-icon>home</mat-icon>
       <span>Ir al Inicio</span>
     </a>
-    @if (authService.isAdmin()) {
-    <a mat-menu-item routerLink="/admin">
-      <mat-icon>admin_panel_settings</mat-icon>
-      <span>Admin Panel</span>
-    </a>
+    @if (hasAdminAccess()) {
+      <a mat-menu-item routerLink="/admin">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <span>Admin Panel</span>
+      </a>
     }
     <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
@@ -79,14 +79,14 @@
 <!-- Bottom Navigation (Mobile) -->
 <nav class="bottom-nav mobile-only">
   @for (item of navItems; track item.route) {
-  <a
-    [routerLink]="item.route"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
-    class="nav-item"
-  >
-    <mat-icon>{{ item.icon }}</mat-icon>
-    <span>{{ item.label }}</span>
-  </a>
+    <a
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
+      class="nav-item"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
+    </a>
   }
 </nav>

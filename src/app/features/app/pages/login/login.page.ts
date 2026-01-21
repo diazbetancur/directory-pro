@@ -38,8 +38,8 @@ export class LoginPageComponent {
   mode = signal<'login' | 'register'>('login');
 
   // Login fields
-  email = '';
-  password = '';
+  email = 'admin@yourcompany.com';
+  password = 'Admin123!*';
   hidePassword = signal(true);
 
   // Register fields
@@ -54,6 +54,19 @@ export class LoginPageComponent {
   registerLoading = signal(false);
   registerError = signal<string | null>(null);
   registerSuccess = signal<string | null>(null);
+
+  // Session expired message
+  readonly sessionExpiredMessage = signal<string | null>(null);
+
+  constructor() {
+    // Check for session expired reason in query params
+    const reason = this.route.snapshot.queryParams['reason'];
+    if (reason === 'session_expired') {
+      this.sessionExpiredMessage.set(
+        'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+      );
+    }
+  }
 
   toggleMode(): void {
     this.mode.update((m) => (m === 'login' ? 'register' : 'login'));
@@ -130,7 +143,7 @@ export class LoginPageComponent {
         next: () => {
           this.registerLoading.set(false);
           this.registerSuccess.set(
-            '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.'
+            '¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.',
           );
           // Auto-switch to login after 2 seconds
           setTimeout(() => {
@@ -148,7 +161,7 @@ export class LoginPageComponent {
           this.registerError.set(
             err.error?.message ||
               err.error?.title ||
-              'Error al crear la cuenta. Intenta nuevamente.'
+              'Error al crear la cuenta. Intenta nuevamente.',
           );
         },
       });

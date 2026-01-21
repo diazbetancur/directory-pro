@@ -11,31 +11,50 @@
       <span>Admin Panel</span>
     </div>
 
-    <mat-nav-list>
-      @for (item of navItems; track item.route) {
-      <a
-        mat-list-item
-        [routerLink]="item.route"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: item.route === '/admin' }"
-        (click)="isMobile() && sidenav.close()"
-      >
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-        <span matListItemTitle>{{ item.label }}</span>
-      </a>
+    <!-- Dynamic Menu Sections -->
+    @for (section of adminMenu(); track section.title) {
+      @if (section.hasVisibleItems) {
+        @if (section.title) {
+          <div class="section-title">{{ section.title }}</div>
+        }
+        <mat-nav-list>
+          @for (item of section.items; track item.id) {
+            @if (item.visible) {
+              <a
+                mat-list-item
+                [routerLink]="item.route"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: item.exactMatch ?? false }"
+                [matTooltip]="item.tooltip ?? ''"
+                matTooltipPosition="right"
+                (click)="isMobile() && sidenav.close()"
+              >
+                <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+                <span matListItemTitle>{{ item.label }}</span>
+                @if (item.badge) {
+                  <span class="menu-badge">{{ item.badge }}</span>
+                }
+              </a>
+            }
+          }
+        </mat-nav-list>
+        @if (section.dividerAfter) {
+          <mat-divider></mat-divider>
+        }
       }
-    </mat-nav-list>
+    }
 
+    <!-- Footer Navigation -->
     <div class="sidenav-footer">
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/dashboard">
-        <mat-icon matListItemIcon>arrow_back</mat-icon>
-        <span matListItemTitle>Volver al Dashboard</span>
-      </a>
-      <a mat-list-item routerLink="/">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle>Ir al Inicio</span>
-      </a>
+      @for (item of footerMenu(); track item.id) {
+        @if (item.visible) {
+          <a mat-list-item [routerLink]="item.route">
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      }
     </div>
   </mat-sidenav>
 
@@ -58,7 +77,7 @@
       <mat-menu #userMenu="matMenu">
         <div class="user-info">
           <strong>{{ authService.session().email }}</strong>
-          <span class="role-badge">Admin</span>
+          <span class="role-badge">{{ authService.primaryRole() }}</span>
         </div>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="logout()">

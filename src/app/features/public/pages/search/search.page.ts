@@ -49,7 +49,7 @@ export class SearchPageComponent implements OnInit, OnDestroy {
     this.homeStore.featuredCategories().map((c) => ({
       name: c.name,
       slug: c.slug,
-    }))
+    })),
   );
 
   ngOnInit(): void {
@@ -95,8 +95,8 @@ export class SearchPageComponent implements OnInit, OnDestroy {
           totalResults: response.pagination?.totalItems || 0,
         });
       },
-      error: (err) => {
-        console.error('Error loading search results:', err);
+      error: () => {
+        // Error is handled by store and shown in UI
       },
     });
   }

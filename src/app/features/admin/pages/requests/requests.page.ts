@@ -12,13 +12,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { AdminRequestListItem } from '@data/api';
 import { AdminRequestsStore } from '@data/stores';
-import { AnalyticsService } from '@shared/services';
+import { AnalyticsService, ToastService } from '@shared/services';
 
 @Component({
   selector: 'app-admin-requests',
@@ -31,7 +30,6 @@ import { AnalyticsService } from '@shared/services';
     MatTabsModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule,
     MatTooltipModule,
   ],
   templateUrl: './requests.page.html',
@@ -40,7 +38,7 @@ import { AnalyticsService } from '@shared/services';
 export class AdminRequestsPageComponent implements OnInit {
   readonly store = inject(AdminRequestsStore);
   private readonly analytics = inject(AnalyticsService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
   private currentTab = signal(0);
@@ -119,9 +117,7 @@ export class AdminRequestsPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.snackBar.open('Solicitud rechazada', 'OK', {
-            duration: 3000,
-          });
+          this.toast.warning('Solicitud rechazada');
 
           // Track analytics
           this.analytics.trackEvent('admin_reject_request', {
@@ -131,9 +127,7 @@ export class AdminRequestsPageComponent implements OnInit {
           });
         },
         error: () => {
-          this.snackBar.open('Error al rechazar solicitud', 'OK', {
-            duration: 3000,
-          });
+          this.toast.error('Error al rechazar solicitud');
         },
       });
   }

@@ -9,7 +9,33 @@ export { ApiClient } from './api-client';
 export * from './api-models';
 
 // API Clients
+export { AdminUsersApi } from './admin-users.api';
+// Admin Users types (selective export to avoid conflicts with api-models)
+export type {
+  AdminApiError,
+  AdminUserDetailDto,
+  AdminUserListDto,
+  AdminUsersQueryParams,
+  CreateUserDto,
+  CreateUserResultDto,
+  DeleteUserResultDto,
+  PaginatedResponseFormatA,
+  PaginatedResponseFormatB,
+  PaginationInfo,
+  UpdateUserDto,
+  UpdateUserResultDto,
+  UpdateUserRolesDto,
+  UpdateUserRolesResultDto,
+} from './admin-users.types';
+export {
+  isPaginatedFormatA,
+  isPaginatedFormatB,
+} from './admin-users.types';
 export { AdminApi } from './admin.api';
 export { AuthApi } from './auth.api';
 export { ProfessionalApi } from './professional.api';
 export { PublicApi } from './public.api';
+export type * from './roles.api';
+export { RolesApi } from './roles.api';
+export type * from './users.api';
+export { UsersApi } from './users.api';

@@ -6,9 +6,9 @@
 // ============================================================================
 
 // Import Design System
-@use 'styles/design-tokens' as tokens;
-@use 'styles/material-theme';
-@use 'styles/utilities';
+@use "styles/design-tokens" as tokens;
+@use "styles/material-theme";
+@use "styles/utilities";
 
 // ============================================================================
 // Reset & Base
@@ -148,4 +148,32 @@ p {
   .no-print {
     display: none !important;
   }
+}
+
+// ============================================================================
+// Toast Notifications (Global Snackbar Styling)
+// ============================================================================
+
+.toast-success {
+  --mdc-snackbar-container-color: #059669;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+.toast-error {
+  --mdc-snackbar-container-color: #dc2626;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+.toast-warning {
+  --mdc-snackbar-container-color: #d97706;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
+}
+
+.toast-info {
+  --mdc-snackbar-container-color: #2563eb;
+  --mdc-snackbar-supporting-text-color: white;
+  --mat-snack-bar-button-color: white;
 }

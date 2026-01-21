@@ -4,7 +4,18 @@
  * Centralizes all authentication and authorization exports.
  */
 
-// Guards
+// Guards - RBAC (Recommended)
+export {
+  adminAreaGuard,
+  hasAllPermissions,
+  hasAnyAdminPermission,
+  hasAnyPermission,
+  hasPermission,
+  permissionGuard,
+} from './rbac.guards';
+export type { PermissionRouteData } from './rbac.guards';
+
+// Guards - Legacy (Role-based)
 export { authGuard } from './auth.guard';
 export { adminGuard, professionalGuard, roleGuard } from './role.guard';
 

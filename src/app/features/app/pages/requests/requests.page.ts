@@ -12,11 +12,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ServiceRequest } from '@data/api';
 import { ProfessionalRequestsStore } from '@data/stores';
-import { AnalyticsService } from '@shared/services';
+import { AnalyticsService, ToastService } from '@shared/services';
 
 @Component({
   selector: 'app-requests',
@@ -28,7 +27,6 @@ import { AnalyticsService } from '@shared/services';
     MatTabsModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule,
   ],
   templateUrl: './requests.page.html',
   styleUrl: './requests.page.scss',
@@ -36,7 +34,7 @@ import { AnalyticsService } from '@shared/services';
 export class RequestsPageComponent implements OnInit {
   readonly store = inject(ProfessionalRequestsStore);
   private readonly analytics = inject(AnalyticsService);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
 
   private currentTab = signal(0);
@@ -113,9 +111,7 @@ export class RequestsPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.snackBar.open('Solicitud marcada como contactada', 'OK', {
-            duration: 3000,
-          });
+          this.toast.success('Solicitud marcada como contactada');
 
           // Track analytics
           this.analytics.trackEvent('professional_update_request_status', {
@@ -125,9 +121,7 @@ export class RequestsPageComponent implements OnInit {
           });
         },
         error: () => {
-          this.snackBar.open('Error al actualizar estado', 'OK', {
-            duration: 3000,
-          });
+          this.toast.error('Error al actualizar estado');
         },
       });
   }
@@ -138,9 +132,7 @@ export class RequestsPageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.snackBar.open('Solicitud cerrada exitosamente', 'OK', {
-            duration: 3000,
-          });
+          this.toast.success('Solicitud cerrada exitosamente');
 
           // Track analytics
           this.analytics.trackEvent('professional_update_request_status', {
@@ -150,9 +142,7 @@ export class RequestsPageComponent implements OnInit {
           });
         },
         error: () => {
-          this.snackBar.open('Error al cerrar solicitud', 'OK', {
-            duration: 3000,
-          });
+          this.toast.error('Error al cerrar solicitud');
         },
       });
   }

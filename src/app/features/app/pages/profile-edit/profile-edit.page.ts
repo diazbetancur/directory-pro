@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -6,7 +6,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastService } from '@shared/services';
 
 @Component({
   selector: 'app-profile-edit',
@@ -19,12 +19,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatSnackBarModule,
   ],
   templateUrl: './profile-edit.page.html',
   styleUrl: './profile-edit.page.scss',
 })
 export class ProfileEditPageComponent {
+  private readonly toast = inject(ToastService);
+
   profile = {
     name: 'Juan Pérez',
     email: 'juan@example.com',
@@ -40,8 +41,6 @@ export class ProfileEditPageComponent {
   };
 
   newService = '';
-
-  constructor(private snackBar: MatSnackBar) {}
 
   addService(): void {
     if (
@@ -59,8 +58,6 @@ export class ProfileEditPageComponent {
 
   saveProfile(): void {
     // Mock save
-    this.snackBar.open('Perfil guardado exitosamente', 'Cerrar', {
-      duration: 3000,
-    });
+    this.toast.success('Perfil guardado exitosamente');
   }
 }

@@ -6,15 +6,15 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { Observable, catchError, of, tap } from 'rxjs';
 import {
   CreateServiceRequestPayload,
   CreateServiceRequestResponse,
-  getErrorMessage,
-  hasFieldErrors,
   ProblemDetails,
   PublicApi,
+  getErrorMessage,
+  hasFieldErrors,
 } from '@data/api';
+import { Observable, catchError, of, tap, throwError } from 'rxjs';
 
 export interface RequestFormState {
   loading: boolean;
@@ -22,6 +22,8 @@ export interface RequestFormState {
   error: string | null;
   fieldErrors: Record<string, string[]> | null;
   requestId: string | null;
+  /** Tracks submitted request hashes to prevent duplicates */
+  submittedHashes: Set<string>;
 }
 
 const initialState: RequestFormState = {
@@ -30,6 +32,7 @@ const initialState: RequestFormState = {
   error: null,
   fieldErrors: null,
   requestId: null,
+  submittedHashes: new Set(),
 };
 
 /**
@@ -69,10 +72,27 @@ export class RequestFormStore {
   }
 
   /**
+   * Generate a hash for duplicate detection
+   */
+  private generateRequestHash(payload: CreateServiceRequestPayload): string {
+    const key = `${payload.profileId}|${payload.clientEmail}|${payload.message?.slice(0, 50)}`;
+    return btoa(key);
+  }
+
+  /**
+   * Check if a similar request was already submitted
+   */
+  isDuplicateRequest(payload: CreateServiceRequestPayload): boolean {
+    const hash = this.generateRequestHash(payload);
+    return this._state().submittedHashes.has(hash);
+  }
+
+  /**
    * Submit a service request
+   * Includes duplicate prevention within the same session
    */
   submit(
-    payload: CreateServiceRequestPayload
+    payload: CreateServiceRequestPayload,
   ): Observable<CreateServiceRequestResponse> {
     // Only submit in browser
     if (!this.isBrowser) {
@@ -85,26 +105,58 @@ export class RequestFormStore {
       });
     }
 
-    this._state.set({
+    // Check for duplicate submission
+    const requestHash = this.generateRequestHash(payload);
+    if (this._state().submittedHashes.has(requestHash)) {
+      this._state.update((s) => ({
+        ...s,
+        error:
+          'Ya enviaste una solicitud similar. Por favor espera la respuesta del profesional.',
+      }));
+      return throwError(() => new Error('Duplicate request'));
+    }
+
+    this._state.update((s) => ({
+      ...s,
       loading: true,
       success: false,
       error: null,
       fieldErrors: null,
       requestId: null,
-    });
+    }));
 
     return this.publicApi.createRequest(payload).pipe(
       tap((response) => {
+        // Add hash to prevent duplicate submissions
+        const updatedHashes = new Set(this._state().submittedHashes);
+        updatedHashes.add(requestHash);
+
         this._state.set({
           loading: false,
           success: true,
           error: null,
           fieldErrors: null,
           requestId: response.id,
+          submittedHashes: updatedHashes,
         });
       }),
       catchError((err) => {
         const errorBody = err?.error;
+
+        // Handle 409 Conflict (duplicate from server)
+        if (err?.status === 409) {
+          const updatedHashes = new Set(this._state().submittedHashes);
+          updatedHashes.add(requestHash);
+
+          this._state.update((s) => ({
+            ...s,
+            loading: false,
+            error:
+              'Ya existe una solicitud similar pendiente con este profesional.',
+            submittedHashes: updatedHashes,
+          }));
+          throw err;
+        }
 
         // Extract field errors if present (ProblemDetails format)
         let fieldErrors: Record<string, string[]> | null = null;
@@ -114,22 +166,33 @@ export class RequestFormStore {
 
         const errorMessage = getErrorMessage(errorBody ?? err);
 
-        this._state.set({
+        this._state.update((s) => ({
+          ...s,
           loading: false,
           success: false,
           error: errorMessage,
           fieldErrors,
           requestId: null,
-        });
+        }));
         throw err;
-      })
+      }),
     );
   }
 
   /**
-   * Reset form state
+   * Reset form state (keeps submittedHashes to prevent duplicates)
    */
   reset(): void {
+    this._state.update((s) => ({
+      ...initialState,
+      submittedHashes: s.submittedHashes,
+    }));
+  }
+
+  /**
+   * Full reset including duplicate tracking (use on logout or page leave)
+   */
+  fullReset(): void {
     this._state.set(initialState);
   }
 
