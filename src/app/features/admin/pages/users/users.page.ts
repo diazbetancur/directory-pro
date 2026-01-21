@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -15,7 +16,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  PageEvent,
+} from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
@@ -25,7 +30,6 @@ import type { AdminUserListDto } from '@data/api/admin-users.types';
 import { AdminUsersStore } from '@data/stores/admin-users.store';
 import { ToastService } from '@shared/services';
 import { PERMISSIONS } from '../../admin-menu.config';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-users-page',
@@ -131,8 +135,8 @@ export class UsersPageComponent implements OnInit {
     () => !this.loading() && this.users().length > 0,
   );
 
-  readonly activeUsersCount = computed(() =>
-    this.users().filter((u) => !u.isLockedOut).length,
+  readonly activeUsersCount = computed(
+    () => this.users().filter((u) => !u.isLockedOut).length,
   );
 
   // ==========================================================================
@@ -297,7 +301,10 @@ export class UsersPageComponent implements OnInit {
   }
 
   getRoleColor(role: string): 'primary' | 'accent' | 'warn' | undefined {
-    const roleColors: Record<string, 'primary' | 'accent' | 'warn' | undefined> = {
+    const roleColors: Record<
+      string,
+      'primary' | 'accent' | 'warn' | undefined
+    > = {
       SuperAdmin: 'warn',
       Admin: 'accent',
       Professional: 'primary',

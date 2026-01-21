@@ -9,7 +9,10 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import type { AdminUserListDto, UpdateUserRolesDto } from '@data/api/admin-users.types';
+import type {
+  AdminUserListDto,
+  UpdateUserRolesDto,
+} from '@data/api/admin-users.types';
 import { AdminUsersStore } from '@data/stores/admin-users.store';
 
 export interface UserRolesDialogData {
@@ -143,225 +146,227 @@ interface RoleItem {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-width: 400px;
-      max-width: 500px;
-    }
-
-    h2[mat-dialog-title] {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      mat-icon {
-        color: var(--mat-app-primary);
-      }
-    }
-
-    .user-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px 16px;
-      background: var(--mat-app-surface-container);
-      border-radius: 12px;
-
-      .avatar {
-        font-size: 40px;
-        width: 40px;
-        height: 40px;
-        color: var(--mat-app-primary);
+  styles: [
+    `
+      mat-dialog-content {
+        min-width: 400px;
+        max-width: 500px;
       }
 
-      .user-info {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-
-        strong {
-          font-size: 15px;
-        }
-
-        .email {
-          font-size: 13px;
-          color: var(--mat-app-on-surface-variant);
-        }
-      }
-    }
-
-    .divider {
-      height: 1px;
-      background: var(--mat-app-outline-variant);
-      margin: 16px 0;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px;
-      gap: 16px;
-
-      p {
-        margin: 0;
-        color: var(--mat-app-on-surface-variant);
-        font-size: 14px;
-      }
-    }
-
-    .roles-section {
-      .hint {
+      h2[mat-dialog-title] {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin: 0 0 16px 0;
-        padding: 8px 12px;
+        gap: 12px;
+
+        mat-icon {
+          color: var(--mat-app-primary);
+        }
+      }
+
+      .user-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 16px;
         background: var(--mat-app-surface-container);
-        border-radius: 8px;
-        font-size: 13px;
-        color: var(--mat-app-on-surface-variant);
+        border-radius: 12px;
 
-        mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-        }
-      }
-    }
-
-    .roles-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .role-item {
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: background 0.2s ease;
-
-      &:hover {
-        background: var(--mat-app-surface-container-low);
-      }
-
-      &.selected {
-        background: var(--mat-app-primary-container);
-      }
-
-      .role-content {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .role-name {
-          font-weight: 500;
-        }
-
-        .role-badge {
-          font-size: 10px;
-          padding: 2px 8px;
-          border-radius: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-
-          &.system {
-            background: var(--mat-app-secondary-container);
-            color: var(--mat-app-on-secondary-container);
-          }
-        }
-      }
-    }
-
-    .changes-summary {
-      margin-top: 16px;
-      padding: 12px 16px;
-      background: var(--mat-app-surface-container);
-      border-radius: 8px;
-
-      h4 {
-        margin: 0 0 8px 0;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--mat-app-on-surface-variant);
-      }
-
-      .change-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        padding: 4px 0;
-
-        mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-        }
-
-        &.add {
+        .avatar {
+          font-size: 40px;
+          width: 40px;
+          height: 40px;
           color: var(--mat-app-primary);
         }
 
-        &.remove {
-          color: var(--mat-app-error);
+        .user-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          strong {
+            font-size: 15px;
+          }
+
+          .email {
+            font-size: 13px;
+            color: var(--mat-app-on-surface-variant);
+          }
         }
       }
-    }
 
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px;
-      gap: 12px;
-      text-align: center;
-
-      mat-icon {
-        font-size: 48px;
-        width: 48px;
-        height: 48px;
-        color: var(--mat-app-on-surface-variant);
-        opacity: 0.5;
+      .divider {
+        height: 1px;
+        background: var(--mat-app-outline-variant);
+        margin: 16px 0;
       }
 
-      p {
-        margin: 0;
-        color: var(--mat-app-on-surface-variant);
-        font-size: 14px;
-      }
-    }
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px;
+        gap: 16px;
 
-    .error-banner {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 16px;
-      background: var(--mat-app-error-container);
-      color: var(--mat-app-on-error-container);
-      border-radius: 8px;
-      margin-top: 16px;
-
-      mat-icon {
-        color: var(--mat-app-error);
-        flex-shrink: 0;
+        p {
+          margin: 0;
+          color: var(--mat-app-on-surface-variant);
+          font-size: 14px;
+        }
       }
 
-      span {
-        font-size: 14px;
-        line-height: 1.4;
-      }
-    }
+      .roles-section {
+        .hint {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 16px 0;
+          padding: 8px 12px;
+          background: var(--mat-app-surface-container);
+          border-radius: 8px;
+          font-size: 13px;
+          color: var(--mat-app-on-surface-variant);
 
-    mat-dialog-actions button {
-      mat-spinner {
-        display: inline-block;
-        margin-right: 8px;
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
       }
-    }
-  `],
+
+      .roles-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .role-item {
+        padding: 8px 12px;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+
+        &:hover {
+          background: var(--mat-app-surface-container-low);
+        }
+
+        &.selected {
+          background: var(--mat-app-primary-container);
+        }
+
+        .role-content {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .role-name {
+            font-weight: 500;
+          }
+
+          .role-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            &.system {
+              background: var(--mat-app-secondary-container);
+              color: var(--mat-app-on-secondary-container);
+            }
+          }
+        }
+      }
+
+      .changes-summary {
+        margin-top: 16px;
+        padding: 12px 16px;
+        background: var(--mat-app-surface-container);
+        border-radius: 8px;
+
+        h4 {
+          margin: 0 0 8px 0;
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: var(--mat-app-on-surface-variant);
+        }
+
+        .change-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          padding: 4px 0;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+
+          &.add {
+            color: var(--mat-app-primary);
+          }
+
+          &.remove {
+            color: var(--mat-app-error);
+          }
+        }
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px;
+        gap: 12px;
+        text-align: center;
+
+        mat-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          color: var(--mat-app-on-surface-variant);
+          opacity: 0.5;
+        }
+
+        p {
+          margin: 0;
+          color: var(--mat-app-on-surface-variant);
+          font-size: 14px;
+        }
+      }
+
+      .error-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--mat-app-error-container);
+        color: var(--mat-app-on-error-container);
+        border-radius: 8px;
+        margin-top: 16px;
+
+        mat-icon {
+          color: var(--mat-app-error);
+          flex-shrink: 0;
+        }
+
+        span {
+          font-size: 14px;
+          line-height: 1.4;
+        }
+      }
+
+      mat-dialog-actions button {
+        mat-spinner {
+          display: inline-block;
+          margin-right: 8px;
+        }
+      }
+    `,
+  ],
 })
 export class UserRolesDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<UserRolesDialogComponent>);
@@ -380,7 +385,12 @@ export class UserRolesDialogComponent implements OnInit {
   private originalRoles: string[] = [];
 
   // System roles fallback
-  private readonly SYSTEM_ROLES = ['SuperAdmin', 'Admin', 'Professional', 'User'];
+  private readonly SYSTEM_ROLES = [
+    'SuperAdmin',
+    'Admin',
+    'Professional',
+    'User',
+  ];
 
   // Computed changes
   readonly rolesToAdd = computed(() => {
@@ -493,7 +503,9 @@ export class UserRolesDialogComponent implements OnInit {
         clearInterval(checkComplete);
         const error = this.store.error();
         if (error) {
-          this.errorMessage.set(error.message || 'Error al actualizar los roles');
+          this.errorMessage.set(
+            error.message || 'Error al actualizar los roles',
+          );
         } else {
           this.dialogRef.close({ success: true });
         }

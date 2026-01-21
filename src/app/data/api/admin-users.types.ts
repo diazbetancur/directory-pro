@@ -8,8 +8,8 @@
  */
 
 import type {
-  PaginationMeta,
   ProblemDetails as BaseProblemDetails,
+  PaginationMeta,
 } from './api-models';
 
 // =============================================================================

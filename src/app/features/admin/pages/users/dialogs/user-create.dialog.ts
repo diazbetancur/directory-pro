@@ -44,7 +44,11 @@ import { AdminUsersStore } from '@data/stores/admin-users.store';
 
           <mat-form-field appearance="outline">
             <mat-label>Nombre de usuario</mat-label>
-            <input matInput formControlName="userName" placeholder="usuario123" />
+            <input
+              matInput
+              formControlName="userName"
+              placeholder="usuario123"
+            />
             <mat-icon matPrefix>account_circle</mat-icon>
             @if (form.get('userName')?.hasError('required')) {
               <mat-error>El nombre de usuario es requerido</mat-error>
@@ -56,7 +60,12 @@ import { AdminUsersStore } from '@data/stores/admin-users.store';
 
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" placeholder="usuario@ejemplo.com" />
+            <input
+              matInput
+              formControlName="email"
+              type="email"
+              placeholder="usuario@ejemplo.com"
+            />
             <mat-icon matPrefix>email</mat-icon>
             @if (form.get('email')?.hasError('required')) {
               <mat-error>El email es requerido</mat-error>
@@ -68,10 +77,21 @@ import { AdminUsersStore } from '@data/stores/admin-users.store';
 
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
-            <input matInput formControlName="password" [type]="showPassword() ? 'text' : 'password'" />
+            <input
+              matInput
+              formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+            />
             <mat-icon matPrefix>lock</mat-icon>
-            <button mat-icon-button matSuffix type="button" (click)="togglePassword()">
-              <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePassword()"
+            >
+              <mat-icon>{{
+                showPassword() ? 'visibility_off' : 'visibility'
+              }}</mat-icon>
             </button>
             @if (form.get('password')?.hasError('required')) {
               <mat-error>La contraseña es requerida</mat-error>
@@ -83,7 +103,11 @@ import { AdminUsersStore } from '@data/stores/admin-users.store';
 
           <mat-form-field appearance="outline">
             <mat-label>Confirmar contraseña</mat-label>
-            <input matInput formControlName="confirmPassword" [type]="showPassword() ? 'text' : 'password'" />
+            <input
+              matInput
+              formControlName="confirmPassword"
+              [type]="showPassword() ? 'text' : 'password'"
+            />
             <mat-icon matPrefix>lock_outline</mat-icon>
             @if (form.get('confirmPassword')?.hasError('required')) {
               <mat-error>Confirma la contraseña</mat-error>
@@ -113,7 +137,11 @@ import { AdminUsersStore } from '@data/stores/admin-users.store';
 
           <mat-form-field appearance="outline">
             <mat-label>Teléfono</mat-label>
-            <input matInput formControlName="phone" placeholder="+1 234 567 8900" />
+            <input
+              matInput
+              formControlName="phone"
+              placeholder="+1 234 567 8900"
+            />
             <mat-icon matPrefix>phone</mat-icon>
           </mat-form-field>
         </div>
@@ -177,94 +205,96 @@ import { AdminUsersStore } from '@data/stores/admin-users.store';
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-width: 400px;
-      max-width: 500px;
-    }
-
-    h2[mat-dialog-title] {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      mat-icon {
-        color: var(--mat-app-primary);
+  styles: [
+    `
+      mat-dialog-content {
+        min-width: 400px;
+        max-width: 500px;
       }
-    }
 
-    .user-form {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      h2[mat-dialog-title] {
+        display: flex;
+        align-items: center;
+        gap: 12px;
 
-    .form-section {
-      margin-bottom: 16px;
+        mat-icon {
+          color: var(--mat-app-primary);
+        }
+      }
 
-      h3 {
-        margin: 0 0 12px 0;
+      .user-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-section {
+        margin-bottom: 16px;
+
+        h3 {
+          margin: 0 0 12px 0;
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--mat-app-on-surface-variant);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        mat-form-field {
+          width: 100%;
+        }
+
+        &.options {
+          padding: 8px 0;
+        }
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .loading-inline {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: var(--mat-app-surface-container);
+        border-radius: 8px;
         font-size: 14px;
-        font-weight: 500;
         color: var(--mat-app-on-surface-variant);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
       }
 
-      mat-form-field {
-        width: 100%;
+      .error-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--mat-app-error-container);
+        color: var(--mat-app-on-error-container);
+        border-radius: 8px;
+        margin-top: 16px;
+
+        mat-icon {
+          color: var(--mat-app-error);
+          flex-shrink: 0;
+        }
+
+        span {
+          font-size: 14px;
+          line-height: 1.4;
+        }
       }
 
-      &.options {
-        padding: 8px 0;
+      mat-dialog-actions button {
+        mat-spinner {
+          display: inline-block;
+          margin-right: 8px;
+        }
       }
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .loading-inline {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: var(--mat-app-surface-container);
-      border-radius: 8px;
-      font-size: 14px;
-      color: var(--mat-app-on-surface-variant);
-    }
-
-    .error-banner {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 16px;
-      background: var(--mat-app-error-container);
-      color: var(--mat-app-on-error-container);
-      border-radius: 8px;
-      margin-top: 16px;
-
-      mat-icon {
-        color: var(--mat-app-error);
-        flex-shrink: 0;
-      }
-
-      span {
-        font-size: 14px;
-        line-height: 1.4;
-      }
-    }
-
-    mat-dialog-actions button {
-      mat-spinner {
-        display: inline-block;
-        margin-right: 8px;
-      }
-    }
-  `],
+    `,
+  ],
 })
 export class UserCreateDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<UserCreateDialogComponent>);
@@ -333,7 +363,11 @@ export class UserCreateDialogComponent implements OnInit {
     };
 
     // Clean up empty profile
-    if (!dto.profile?.firstName && !dto.profile?.lastName && !dto.profile?.phone) {
+    if (
+      !dto.profile?.firstName &&
+      !dto.profile?.lastName &&
+      !dto.profile?.phone
+    ) {
       delete dto.profile;
     }
 
@@ -356,7 +390,9 @@ export class UserCreateDialogComponent implements OnInit {
     setTimeout(() => clearInterval(checkComplete), 30000);
   }
 
-  private passwordMatchValidator(group: FormGroup): { passwordMismatch: boolean } | null {
+  private passwordMatchValidator(
+    group: FormGroup,
+  ): { passwordMismatch: boolean } | null {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };

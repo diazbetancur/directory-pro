@@ -87,7 +87,11 @@ export interface UserEditDialogData {
 
           <mat-form-field appearance="outline">
             <mat-label>Teléfono</mat-label>
-            <input matInput formControlName="phone" placeholder="+1 234 567 8900" />
+            <input
+              matInput
+              formControlName="phone"
+              placeholder="+1 234 567 8900"
+            />
             <mat-icon matPrefix>phone</mat-icon>
           </mat-form-field>
         </div>
@@ -139,125 +143,127 @@ export interface UserEditDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-width: 400px;
-      max-width: 500px;
-    }
-
-    h2[mat-dialog-title] {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      mat-icon {
-        color: var(--mat-app-primary);
-      }
-    }
-
-    .user-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: var(--mat-app-surface-container);
-      border-radius: 12px;
-      margin-bottom: 24px;
-
-      .avatar {
-        font-size: 48px;
-        width: 48px;
-        height: 48px;
-        color: var(--mat-app-primary);
+  styles: [
+    `
+      mat-dialog-content {
+        min-width: 400px;
+        max-width: 500px;
       }
 
-      .user-info {
+      h2[mat-dialog-title] {
         display: flex;
-        flex-direction: column;
-        gap: 4px;
+        align-items: center;
+        gap: 12px;
 
-        strong {
-          font-size: 16px;
+        mat-icon {
+          color: var(--mat-app-primary);
+        }
+      }
+
+      .user-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: var(--mat-app-surface-container);
+        border-radius: 12px;
+        margin-bottom: 24px;
+
+        .avatar {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          color: var(--mat-app-primary);
         }
 
-        .email {
+        .user-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          strong {
+            font-size: 16px;
+          }
+
+          .email {
+            font-size: 14px;
+            color: var(--mat-app-on-surface-variant);
+          }
+        }
+      }
+
+      .edit-form {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-section {
+        margin-bottom: 16px;
+
+        h3 {
+          margin: 0 0 12px 0;
           font-size: 14px;
+          font-weight: 500;
+          color: var(--mat-app-on-surface-variant);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        mat-form-field {
+          width: 100%;
+        }
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .toggle-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px;
+        background: var(--mat-app-surface-container);
+        border-radius: 8px;
+
+        .toggle-hint {
+          font-size: 12px;
           color: var(--mat-app-on-surface-variant);
         }
       }
-    }
 
-    .edit-form {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      .error-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--mat-app-error-container);
+        color: var(--mat-app-on-error-container);
+        border-radius: 8px;
+        margin-top: 16px;
 
-    .form-section {
-      margin-bottom: 16px;
+        mat-icon {
+          color: var(--mat-app-error);
+          flex-shrink: 0;
+        }
 
-      h3 {
-        margin: 0 0 12px 0;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--mat-app-on-surface-variant);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        span {
+          font-size: 14px;
+          line-height: 1.4;
+        }
       }
 
-      mat-form-field {
-        width: 100%;
+      mat-dialog-actions button {
+        mat-spinner {
+          display: inline-block;
+          margin-right: 8px;
+        }
       }
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .toggle-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 12px 16px;
-      background: var(--mat-app-surface-container);
-      border-radius: 8px;
-
-      .toggle-hint {
-        font-size: 12px;
-        color: var(--mat-app-on-surface-variant);
-      }
-    }
-
-    .error-banner {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 16px;
-      background: var(--mat-app-error-container);
-      color: var(--mat-app-on-error-container);
-      border-radius: 8px;
-      margin-top: 16px;
-
-      mat-icon {
-        color: var(--mat-app-error);
-        flex-shrink: 0;
-      }
-
-      span {
-        font-size: 14px;
-        line-height: 1.4;
-      }
-    }
-
-    mat-dialog-actions button {
-      mat-spinner {
-        display: inline-block;
-        margin-right: 8px;
-      }
-    }
-  `],
+    `,
+  ],
 })
 export class UserEditDialogComponent implements OnInit {
   private readonly dialogRef = inject(MatDialogRef<UserEditDialogComponent>);
@@ -353,7 +359,9 @@ export class UserEditDialogComponent implements OnInit {
         clearInterval(checkComplete);
         const error = this.store.error();
         if (error) {
-          this.errorMessage.set(error.message || 'Error al actualizar el usuario');
+          this.errorMessage.set(
+            error.message || 'Error al actualizar el usuario',
+          );
         } else {
           this.dialogRef.close({ success: true });
         }

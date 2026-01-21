@@ -11,6 +11,7 @@ export * from './api-models';
 // API Clients
 export { AdminUsersApi } from './admin-users.api';
 // Admin Users types (selective export to avoid conflicts with api-models)
+export { isPaginatedFormatA, isPaginatedFormatB } from './admin-users.types';
 export type {
   AdminApiError,
   AdminUserDetailDto,
@@ -26,10 +27,6 @@ export type {
   UpdateUserResultDto,
   UpdateUserRolesDto,
   UpdateUserRolesResultDto,
-} from './admin-users.types';
-export {
-  isPaginatedFormatA,
-  isPaginatedFormatB,
 } from './admin-users.types';
 export { AdminApi } from './admin.api';
 export { AuthApi } from './auth.api';
